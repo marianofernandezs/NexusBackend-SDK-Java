@@ -5,8 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c80e02b8-cf33-4764-9c09-0dbb8c06b977" name="Changes" comment="SDK PROXCORE">
+      <change afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/PrimerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/praxcore-paper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/praxcore-paper.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/PraxCore-Paper-1.0.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/original-PraxCore-Paper-1.0.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/PraxCore-Velocity-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/PraxCore-Velocity-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/TokenManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/TokenManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/original-praxcore-velocity-1.0.0.jar" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,10 +64,11 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;feature/UpdateGeneral&quot;,
     &quot;jdk.selected.JDK&quot;: &quot;21&quot;,
-    &quot;last_opened_file_path&quot;: &quot;J:/PRACTICA - 1 TESSERACT/NexusBackend_SDK_clone/praxcore-velocity/src/main/java/com/prax/core/velocity&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.39425287&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   },
@@ -67,6 +90,22 @@
       <recent name="J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="MiPlugin" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="MiPlugin" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c80e02b8-cf33-4764-9c09-0dbb8c06b977" name="Changes" comment="" />

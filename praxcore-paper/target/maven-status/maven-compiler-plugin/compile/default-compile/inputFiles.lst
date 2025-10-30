@@ -1,9 +1,10 @@
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\commands\LoginCommand.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\commands\RegisterCommand.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\DataManager.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\guis\SelectorGUI.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\PlayerConnectionListener.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\PlayerStatsListener.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\PluginMessageListener.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\PraxCorePlugin.java
-J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper\src\main\java\com\prax\core\SelectorListener.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/DataManager.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/PlayerConnectionListener.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/PlayerStatsListener.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/PluginMessageListener.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/PraxCorePlugin.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/SelectorListener.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/commands/LoginCommand.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/guis/SelectorGUI.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/utils/BirthdateValidator.java

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MiPlugin.iml" filepath="$PROJECT_DIR$/MiPlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/praxcore-velocity/PraxCore-Velocity.iml" filepath="$PROJECT_DIR$/praxcore-velocity/PraxCore-Velocity.iml" />
       <module fileurl="file://$PROJECT_DIR$/praxcore-paper/praxcore-paper.iml" filepath="$PROJECT_DIR$/praxcore-paper/praxcore-paper.iml" />
     </modules>

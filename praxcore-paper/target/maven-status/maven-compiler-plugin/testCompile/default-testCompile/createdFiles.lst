@@ -1,0 +1,4 @@
+com/prax/core/DataManagerTest.class
+com/prax/core/commands/RegisterCommandTest.class
+com/prax/core/PrimerTest.class
+com/prax/core/commands/LoginCommandTest.class

@@ -39,6 +39,28 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.15.2</version>
     </dependency>
+    <!-- Tus dependencias existentes de Velocity -->
+
+    <!-- Testing - JUnit 5 -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Testing - Mockito -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>

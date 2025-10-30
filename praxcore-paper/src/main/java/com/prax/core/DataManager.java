@@ -62,13 +62,16 @@ public class DataManager {
         return getConfig().getString("players." + playerUuid.toString() + ".passwordHash");
     }
 
-    public void registerPlayer(UUID playerUuid, String hashedPassword, String email, String ipAddress, String clientType, String version) {
+    public void registerPlayer(UUID playerUuid, String hashedPassword, String email, String ipAddress, String clientType, String version, String birthdate) {
         String basePath = "players." + playerUuid.toString();
         getConfig().set(basePath + ".passwordHash", hashedPassword);
         getConfig().set(basePath + ".email", email);
         getConfig().set(basePath + ".registrationIp", ipAddress);
         getConfig().set(basePath + ".clientType", clientType);
         getConfig().set(basePath + ".versionOnRegister", version);
+        getConfig().set(basePath + ".birthdate", birthdate);
+
+        saveData();
     }
 
     public void setFirstLoginDate(UUID playerUuid, String date) {
@@ -102,5 +105,8 @@ public class DataManager {
         String path = "players." + killerUuid.toString() + ".kills";
         int currentKills = getConfig().getInt(path, 0);
         getConfig().set(path, currentKills + 1);
+    }
+    public String getBirthdate (UUID playerUuid) {
+        return getConfig().getString("players." + playerUuid.toString() + ".birthdate");
     }
 }
