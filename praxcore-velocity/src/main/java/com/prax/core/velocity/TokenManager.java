@@ -113,4 +113,11 @@ public class TokenManager {
             }
         });
     }
+    public void storeToken(UUID uuid, String token) {
+        activeSessions.put(uuid, token);
+    }
+
+    public String getToken(UUID uuid) {
+        return activeSessions.get(uuid);
+    }
 }

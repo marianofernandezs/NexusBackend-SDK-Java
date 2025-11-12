@@ -1,2 +1,3 @@
-com/prax/core/velocity/PraxProxyPlugin.class
 com/prax/core/velocity/TokenManager.class
+com/prax/core/velocity/PraxProxyPlugin.class
+com/prax/core/velocity/BackendClient.class
