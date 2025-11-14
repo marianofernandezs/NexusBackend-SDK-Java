@@ -38,8 +38,16 @@ class PraxProxyPluginTest {
         when(mockPlayer.getUsername()).thenReturn("TestPlayer");
         when(mockConnection.getPlayer()).thenReturn(mockPlayer);
 
+        // Configurar ChannelRegistrar para que onProxyInitialization pueda ejecutarse
+        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
+        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+
         // Crear instancia del plugin
         plugin = new PraxProxyPlugin(mockServer, mockLogger);
+
+        // Inicializar el messenger llamando a onProxyInitialization
+        var mockInitEvent = mock(com.velocitypowered.api.event.proxy.ProxyInitializeEvent.class);
+        plugin.onProxyInitialization(mockInitEvent);
     }
 
     // ==================== TESTS DE INICIALIZACIÓN ====================
@@ -77,6 +85,8 @@ class PraxProxyPluginTest {
     void testPluginInitializationLog() {
         // Arrange
         Logger spyLogger = mock(Logger.class);
+        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
+        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
 
         // Act
         new PraxProxyPlugin(mockServer, spyLogger);
@@ -117,12 +127,18 @@ class PraxProxyPluginTest {
         // Arrange
         var mockEvent = mock(com.velocitypowered.api.event.proxy.ProxyInitializeEvent.class);
         var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+        ProxyServer freshServer = mock(ProxyServer.class);
+        when(freshServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+        Logger freshLogger = mock(Logger.class);
 
-        // Act & Assert
-        assertDoesNotThrow(() -> plugin.onProxyInitialization(mockEvent));
-        verify(mockChannelRegistrar).register(any());
-        verify(mockLogger, atLeastOnce()).info(contains("Canal"));
+        PraxProxyPlugin freshPlugin = new PraxProxyPlugin(freshServer, freshLogger);
+
+        // Act
+        assertDoesNotThrow(() -> freshPlugin.onProxyInitialization(mockEvent));
+
+        // Assert - Debe registrar 2 canales: prax:core y nexus:sync
+        verify(mockChannelRegistrar, times(2)).register(any());
+        verify(freshLogger, atLeastOnce()).info(contains("Canal"));
     }
 
     @Test
@@ -141,19 +157,28 @@ class PraxProxyPluginTest {
 
         // Act & Assert
         assertDoesNotThrow(() -> plugin.onPlayerDisconnect(mockEvent));
-        verify(mockLogger).info(contains("desconectado"));
+        verify(mockLogger, atLeastOnce()).info(contains("desconectado"));
     }
 
     @Test
     @DisplayName("onServerSwitch debe manejar cambio de servidor")
     void testOnServerSwitch() {
         // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.player.ServerPostConnectEvent.class);
+        var mockEvent = mock(com.velocitypowered.api.event.player.ServerConnectedEvent.class);
         when(mockEvent.getPlayer()).thenReturn(mockPlayer);
+
+        var mockServerInfo = mock(com.velocitypowered.api.proxy.server.ServerInfo.class);
+        var mockRegisteredServer = mock(com.velocitypowered.api.proxy.server.RegisteredServer.class);
+        when(mockServerInfo.getName()).thenReturn("lobby");
+        when(mockRegisteredServer.getServerInfo()).thenReturn(mockServerInfo);
+        when(mockEvent.getServer()).thenReturn(mockRegisteredServer);
+
+        // Mock getCurrentServer para que devuelva Optional.empty()
+        when(mockPlayer.getCurrentServer()).thenReturn(Optional.empty());
 
         // Act & Assert
         assertDoesNotThrow(() -> plugin.onServerSwitch(mockEvent));
-        verify(mockLogger).info(contains("cambió de servidor"));
+        verify(mockLogger, atLeastOnce()).info(contains("cambió de servidor"));
     }
 
     // ==================== TESTS DE PLUGIN MESSAGES ====================
@@ -230,10 +255,17 @@ class PraxProxyPluginTest {
     void testQuickReconnect() {
         // Arrange
         var disconnectEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        var switchEvent = mock(com.velocitypowered.api.event.player.ServerPostConnectEvent.class);
+        var switchEvent = mock(com.velocitypowered.api.event.player.ServerConnectedEvent.class);
 
         when(disconnectEvent.getPlayer()).thenReturn(mockPlayer);
         when(switchEvent.getPlayer()).thenReturn(mockPlayer);
+
+        var mockServerInfo = mock(com.velocitypowered.api.proxy.server.ServerInfo.class);
+        var mockRegisteredServer = mock(com.velocitypowered.api.proxy.server.RegisteredServer.class);
+        when(mockServerInfo.getName()).thenReturn("lobby");
+        when(mockRegisteredServer.getServerInfo()).thenReturn(mockServerInfo);
+        when(switchEvent.getServer()).thenReturn(mockRegisteredServer);
+        when(mockPlayer.getCurrentServer()).thenReturn(Optional.empty());
 
         var mockScheduler = mock(Scheduler.class);
         var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
@@ -248,8 +280,8 @@ class PraxProxyPluginTest {
             plugin.onServerSwitch(switchEvent);
         });
 
-        verify(mockLogger).info(contains("desconectado"));
-        verify(mockLogger).info(contains("cambió de servidor"));
+        verify(mockLogger, atLeastOnce()).info(contains("desconectado"));
+        verify(mockLogger, atLeastOnce()).info(contains("cambió de servidor"));
     }
 
     // ==================== TESTS DE INTEGRACIÓN ====================
@@ -258,11 +290,8 @@ class PraxProxyPluginTest {
     @DisplayName("Debe poder manejar ciclo completo: init -> disconnect")
     void testCompleteLifecycle() {
         // Arrange
-        var initEvent = mock(com.velocitypowered.api.event.proxy.ProxyInitializeEvent.class);
         var disconnectEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
 
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
         when(disconnectEvent.getPlayer()).thenReturn(mockPlayer);
 
         var mockScheduler = mock(Scheduler.class);
@@ -272,9 +301,8 @@ class PraxProxyPluginTest {
         when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
         when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
 
-        // Act & Assert
+        // Act & Assert - El plugin ya fue inicializado en setUp
         assertDoesNotThrow(() -> {
-            plugin.onProxyInitialization(initEvent);
             plugin.onPlayerDisconnect(disconnectEvent);
         });
     }
@@ -359,6 +387,10 @@ class PraxProxyPluginTest {
     @Test
     @DisplayName("Debe poder crear múltiples instancias del plugin")
     void testMultiplePluginInstances() {
+        // Arrange
+        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
+        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+
         // Act
         PraxProxyPlugin plugin1 = new PraxProxyPlugin(mockServer, mockLogger);
         PraxProxyPlugin plugin2 = new PraxProxyPlugin(mockServer, mockLogger);
@@ -375,6 +407,10 @@ class PraxProxyPluginTest {
         // Arrange
         ProxyServer server1 = mock(ProxyServer.class);
         ProxyServer server2 = mock(ProxyServer.class);
+
+        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
+        when(server1.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+        when(server2.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
 
         // Act
         PraxProxyPlugin plugin1 = new PraxProxyPlugin(server1, mockLogger);

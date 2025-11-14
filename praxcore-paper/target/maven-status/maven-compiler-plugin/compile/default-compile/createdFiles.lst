@@ -1,4 +1,5 @@
 com/prax/core/PluginMessageListener.class
+com/prax/core/commands/LogoutCommand.class
 com/prax/core/guis/SelectorGUI.class
 com/prax/core/utils/BirthdateValidator.class
 com/prax/core/commands/LoginCommand.class

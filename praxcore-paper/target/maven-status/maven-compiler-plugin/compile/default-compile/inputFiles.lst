@@ -5,6 +5,7 @@
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/PraxCorePlugin.java
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/SelectorListener.java
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/commands/LoginCommand.java
+/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/commands/LogoutCommand.java
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/guis/SelectorGUI.java
 /Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java/praxcore-paper/src/main/java/com/prax/core/utils/BirthdateValidator.java

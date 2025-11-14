@@ -1,4 +1,5 @@
-com/prax/core/DataManagerTest.class
+com/prax/core/commands/LogoutCommandTest.class
 com/prax/core/commands/RegisterCommandTest.class
-com/prax/core/PrimerTest.class
+com/prax/core/PluginMessageListenerAdvancedTest.class
+com/prax/core/PraxCorePluginAdvancedTest.class
 com/prax/core/commands/LoginCommandTest.class

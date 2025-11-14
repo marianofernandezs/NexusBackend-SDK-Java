@@ -1,4 +1,3 @@
-// Ubicación: praxcore-paper/src/main/java/com/prax/core/commands/LoginCommand.java
 package com.prax.core.commands;
 
 import com.prax.core.PraxCorePlugin;
@@ -7,10 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.mindrot.jbcrypt.BCrypt;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class LoginCommand implements CommandExecutor {
 
@@ -28,42 +25,29 @@ public class LoginCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        UUID uuid = player.getUniqueId();
 
         if (!plugin.getDataManager().isPlayerRegistered(player.getUniqueId())) {
-            player.sendMessage("§cNo estás registrado. Usa /register <email> <contraseña> <contraseña> para crear una cuenta.");
+            player.sendMessage("§cNo estás registrado. Usa /register <email> <contraseña> <contraseña> <fecha_nacimiento> para crear una cuenta.");
             return true;
         }
 
-        if (args.length != 1) {
-            player.sendMessage("§cError: El uso correcto es /login <contraseña>");
-            return false;
+        // Validar formato de uso
+        if (args.length != 2) {
+            player.sendMessage("§cUso correcto: /login <email> <contraseña>");
+            return true;
         }
 
-        String password = args[0];
-        String hashedPassword = plugin.getDataManager().getPasswordHash(player.getUniqueId());
+        String email = args[0];
+        String password = args[1];
 
-        if (BCrypt.checkpw(password, hashedPassword)) {
-            // Verificar si ya está autenticado
-            if (plugin.isAuthenticated(player.getUniqueId())) {
-                player.sendMessage("§e¡Ya estás autenticado!");
-                return true;
-            }
-
-            plugin.setAuthenticated(player.getUniqueId(), true);
-            plugin.sendCreateSessionMessage(player);
-            plugin.setLoginTime(player.getUniqueId());
-
-            player.sendMessage("§a¡Has iniciado sesión correctamente!");
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-            String formattedDate = dtf.format(now);
-
-            plugin.getDataManager().incrementLoginCount(player.getUniqueId());
-            plugin.getDataManager().setLastLoginDate(player.getUniqueId(), formattedDate);
-        } else {
-            player.sendMessage("§cContraseña incorrecta. Inténtalo de nuevo.");
+        if (plugin.isAuthenticated(uuid)) {
+            player.sendMessage("§eYa estás autenticado.");
+            return true;
         }
+
+        player.sendMessage("§7Validando tus credenciales con PraxSuite...");
+        plugin.sendCreateSessionAuth(player, email, password);  // 🔹 Nuevo método
 
         return true;
     }

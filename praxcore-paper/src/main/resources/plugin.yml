@@ -11,4 +11,6 @@ commands:
     usage: "Uso incorrecto: /register <email> <contraseña> <repetir_contraseña>"
   login:
     description: Inicia sesión en el servidor.
-    usage: "/login <contraseña>"
+    usage: "/login <email> <contraseña>"
+  logout:
+    description: Cierra tu sesión actual.

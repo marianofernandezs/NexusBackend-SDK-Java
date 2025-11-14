@@ -29,6 +29,57 @@ public class PluginMessageListener implements org.bukkit.plugin.messaging.Plugin
         if ("prax:core".equalsIgnoreCase(channel)) {
             handlePraxCoreMessage(player, message);
         }
+        if (channel.equals("nexus:sync")) {
+
+            ByteArrayDataInput in = ByteStreams.newDataInput(message);
+            String type = in.readUTF();
+
+            switch (type) {
+
+                case "PLAYER_JOIN" -> {
+                    String uuid = in.readUTF();
+                    String name = in.readUTF();
+                    String ip = in.readUTF();
+
+                    Bukkit.getLogger().info("[NEXUS] JOIN → " + name + " (" + uuid + ") IP=" + ip);
+                }
+
+                case "PLAYER_SWITCH" -> {
+                    String uuid = in.readUTF();
+                    String from = in.readUTF();
+                    String to = in.readUTF();
+
+                    Bukkit.getLogger().info("[NEXUS] SWITCH → " + uuid + " " + from + " → " + to);
+                }
+
+                case "PLAYER_QUIT" -> {
+                    String uuid = in.readUTF();
+                    Bukkit.getLogger().info("[NEXUS] QUIT → " + uuid);
+                }
+
+                case "PLAYER_LIST" -> {
+                    Bukkit.getLogger().info("[NEXUS] Lista de jugadores recibida:");
+
+                    int serverCount = in.readInt();
+                    Bukkit.getLogger().info("[NEXUS] Número de servidores: " + serverCount);
+
+                    for (int s = 0; s < serverCount; s++) {
+                        String serverName = in.readUTF();
+                        int count = in.readInt();
+
+                        Bukkit.getLogger().info(" - " + serverName + ": " + count + " jugadores");
+
+                        for (int i = 0; i < count; i++) {
+                            String uid = in.readUTF();
+                            Bukkit.getLogger().info("     * " + uid);
+                        }
+                    }
+                    Bukkit.getLogger().info("[NEXUS] Fin de la lista de jugadores");
+                }
+            }
+
+            return; // Muy importante: evitar mezclar canales
+        }
     }
 
     private void handleBungeeCordMessage(byte[] message) {
@@ -44,47 +95,82 @@ public class PluginMessageListener implements org.bukkit.plugin.messaging.Plugin
     private void handlePraxCoreMessage(Player player, byte[] message) {
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
         String subChannel = in.readUTF();
+        switch (subChannel) {
+            case "ValidationResponse": {
+                UUID playerUuid = UUID.fromString(in.readUTF());
+                boolean isValid = in.readBoolean();
 
-        if (subChannel.equals("ValidationResponse")) {
-            UUID playerUuid = UUID.fromString(in.readUTF());
-            boolean isValid = in.readBoolean();
-
-            // --- INICIO DE LA CORRECCIÓN DEFINITIVA ---
-            // Usamos Bukkit.getScheduler().runTask() para asegurar que toda la lógica que modifica
-            // el estado del jugador se ejecute en el hilo principal del servidor.
-            // Esto previene condiciones de carrera y garantiza la consistencia del estado.
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                Player targetPlayer = Bukkit.getPlayer(playerUuid);
-                if (targetPlayer == null || !targetPlayer.isOnline()) {
-                    plugin.getLogger().warning("Respuesta de validación recibida para un jugador que ya no está online: " + playerUuid);
-                    return;
-                }
-
-                plugin.getLogger().info("[DEBUG] [" + plugin.getServerType() + "]: Respuesta de validación para " + targetPlayer.getName() + ": " + (isValid ? "VALIDA" : "INVALIDA"));
-                plugin.setPendingValidation(playerUuid, false);
-
-                if (isValid) {
-                    // Si la sesión es válida, se establece su estado como autenticado.
-                    // Al ejecutarse en el hilo principal, este cambio es inmediatamente visible
-                    // para el PlayerMoveEvent, descongelando al jugador.
-                    plugin.setAuthenticated(playerUuid, true);
-                    plugin.setLoginTime(playerUuid);
-                    targetPlayer.sendMessage("§a¡Sesión restaurada! Bienvenido de vuelta.");
-                } else {
-                    // Si la sesión no es válida, la lógica anterior era correcta.
-                    plugin.setAuthenticated(playerUuid, false);
-                    if (plugin.isLobbyServer()) {
-                        if (plugin.getDataManager().isPlayerRegistered(playerUuid)) {
-                            targetPlayer.sendMessage("§ePor favor, inicia sesión con /login <contraseña>");
-                        } else {
-                            targetPlayer.sendMessage("§e¡Bienvenido! Usa /register para crear una cuenta.");
-                        }
-                    } else {
-                        targetPlayer.kickPlayer("§cTu sesión no es válida. Por favor, vuelve a conectarte.");
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    Player targetPlayer = Bukkit.getPlayer(playerUuid);
+                    if (targetPlayer == null || !targetPlayer.isOnline()) {
+                        plugin.getLogger().warning("Respuesta de validación para jugador offline: " + playerUuid);
+                        return;
                     }
-                }
-            });
-            // --- FIN DE LA CORRECCIÓN DEFINITIVA ---
+
+                    plugin.getLogger().info("[DEBUG] [" + plugin.getServerType() + "]: ValidationResponse -> " + (isValid ? "VALIDA" : "INVALIDA"));
+                    plugin.setPendingValidation(playerUuid, false);
+
+                    if (isValid) {
+                        plugin.setAuthenticated(playerUuid, true);
+                        plugin.setLoginTime(playerUuid);
+                        targetPlayer.sendMessage("§a¡Sesión iniciada correctamente! Bienvenido de nuevo.");
+                    } else {
+                        plugin.setAuthenticated(playerUuid, false);
+                        if (plugin.isLobbyServer()) {
+                            if (plugin.getDataManager().isPlayerRegistered(playerUuid)) {
+                                targetPlayer.sendMessage("§ePor favor, inicia sesión con /login <email> <contraseña>");
+                            } else {
+                                targetPlayer.sendMessage("§e¡Bienvenido! Usa /register para crear una cuenta.");
+                            }
+                        } else {
+                            targetPlayer.kickPlayer("§cTu sesión no es válida. Por favor, vuelve a conectarte.");
+                        }
+                    }
+                });
+                break;
+            }
+
+            case "RegisterResponse": {
+                UUID playerUuid = UUID.fromString(in.readUTF());
+                boolean success = in.readBoolean();
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    Player targetPlayer = Bukkit.getPlayer(playerUuid);
+                    if (targetPlayer == null) return;
+
+                    if (success) {
+                        targetPlayer.sendMessage("§a¡Tu cuenta se ha registrado correctamente en PraxSuite!");
+                        targetPlayer.sendMessage("§7Usa /login <email> <contraseña> para iniciar sesión.");
+                    } else {
+                        targetPlayer.sendMessage("§cNo se pudo completar el registro. Intenta más tarde o contacta a soporte.");
+                    }
+                });
+                break;
+            }
+
+            case "LogoutResponse": {
+                UUID playerUuid = UUID.fromString(in.readUTF());
+                boolean success = in.readBoolean();
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    Player targetPlayer = Bukkit.getPlayer(playerUuid);
+                    if (targetPlayer == null) return;
+
+                    if (success) {
+                        plugin.setAuthenticated(playerUuid, false);
+                        plugin.removeLoginTime(playerUuid);
+                        targetPlayer.sendMessage("§eHas cerrado sesión correctamente.");
+                    } else {
+                        targetPlayer.sendMessage("§cNo se pudo cerrar tu sesión. Intenta nuevamente.");
+                    }
+                });
+                break;
+            }
+
+            default: {
+                plugin.getLogger().warning("[PraxCore] Subcanal desconocido recibido: " + subChannel);
+                break;
+            }
         }
     }
 }

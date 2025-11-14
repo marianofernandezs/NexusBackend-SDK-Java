@@ -41,7 +41,6 @@ public class RegisterCommand implements CommandExecutor {
         if (args.length != 4) {
             player.sendMessage("cError: El uso correcto es:");
             player.sendMessage("/register <email> <contraseña> <repetir_contraseña> <fecha_nacimiento>");
-            player.sendMessage("Formato de fecha: DD-MM-YYYY (ejemplo: 15-03-2005)");
             return false;
         }
 
@@ -95,6 +94,7 @@ public class RegisterCommand implements CommandExecutor {
 
 
 
+
         // --- LÓGICA DE DETECCIÓN DE CLIENTE BASADA EN TU IDEA ---
         InetSocketAddress address = player.getAddress();
         String ipAddress = address != null ? address.getAddress().getHostAddress() : "IP Desconocida";
@@ -121,7 +121,8 @@ public class RegisterCommand implements CommandExecutor {
         plugin.getDataManager().setFirstLoginDate(player.getUniqueId(), formattedDate);
         plugin.getDataManager().incrementLoginCount(player.getUniqueId());
         plugin.getDataManager().setLastLoginDate(player.getUniqueId(), formattedDate);
-
+        player.sendMessage("§7Enviando solicitud de registro a PraxSuite...");
+        plugin.sendRegisterRequest(player, email, password, birthdateStr); // 🔹 nuevo método
         player.sendMessage("§a¡Te has registrado exitosamente con el email " + email + "! Ahora, por favor, inicia sesión.");
 
         return true;

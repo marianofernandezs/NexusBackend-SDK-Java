@@ -4,9 +4,11 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
+import com.prax.core.velocity.messaging.VelocityMessenger;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -14,6 +16,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import org.slf4j.Logger;
 
@@ -27,12 +30,14 @@ import java.util.concurrent.TimeUnit;
 public class PraxProxyPlugin {
 
     private final ProxyServer server;
+    private VelocityMessenger messenger;
     private final Logger logger;
     private final TokenManager tokenManager;
     private final BackendClient backendClient;
     private final Map<UUID, ScheduledTask> pendingDisconnections = new ConcurrentHashMap<>();
 
     private static final MinecraftChannelIdentifier CHANNEL = MinecraftChannelIdentifier.from("prax:core");
+    private static final MinecraftChannelIdentifier NEXUS_CHANNEL = MinecraftChannelIdentifier.create("nexus", "sync");
 
     @Inject
     public PraxProxyPlugin(ProxyServer server, Logger logger) {
@@ -55,7 +60,12 @@ public class PraxProxyPlugin {
         server.getChannelRegistrar().register(CHANNEL);
         logger.info("[PraxProxy] Canal 'prax:core' registrado con éxito.");
         logger.info("[PraxProxy] Sistema de autenticación PraxSuite listo.");
+        server.getChannelRegistrar().register(NEXUS_CHANNEL);
+        this.messenger = new VelocityMessenger(server, NEXUS_CHANNEL);
+        logger.info("[PraxProxy] Canal 'nexus:sync' registrado con éxito.");
+        logger.info("[PraxProxy] Sistema de obtención de metricas listo.");
     }
+
 
     @Subscribe
     public void onPluginMessage(PluginMessageEvent event) {
@@ -93,7 +103,22 @@ public class PraxProxyPlugin {
     }
 
     @Subscribe
-    public void onServerSwitch(ServerPostConnectEvent event) {
+    public void onPlayerJoin(com.velocitypowered.api.event.connection.PostLoginEvent event) {
+        Player p = event.getPlayer();
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("PLAYER_JOIN");
+        out.writeUTF(p.getUniqueId().toString());
+        out.writeUTF(p.getUsername());
+        out.writeUTF(p.getRemoteAddress().getAddress().getHostAddress());
+
+        messenger.sendToAll(out.toByteArray());
+
+        logger.info("[NEXUS] PLAYER_JOIN enviado a Paper para " + p.getUsername());
+    }
+
+    @Subscribe
+    public void onServerSwitch(ServerConnectedEvent event) {
         Player player = event.getPlayer();
         UUID playerUuid = player.getUniqueId();
 
@@ -104,6 +129,21 @@ public class PraxProxyPlugin {
             pendingTask.cancel();
             logger.info("[SWITCH] Tarea de limpieza cancelada para " + playerUuid);
         }
+        String from = player.getCurrentServer()
+                .map(srv -> srv.getServerInfo().getName())
+                .orElse("NONE");
+
+        String to = event.getServer().getServerInfo().getName();
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("PLAYER_SWITCH");
+        out.writeUTF(player.getUniqueId().toString());
+        out.writeUTF(from);
+        out.writeUTF(to);
+
+        messenger.sendToAll(out.toByteArray());
+
+        logger.info("[NEXUS] PLAYER_SWITCH enviado: " + player.getUsername() + " " + from + " → " + to);
     }
 
     @Subscribe
@@ -112,6 +152,14 @@ public class PraxProxyPlugin {
         UUID playerUuid = player.getUniqueId();
 
         logger.info("[DISCONNECT] " + player.getUsername() + " desconectado. Eliminación de sesión en 30s...");
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("PLAYER_QUIT");
+        out.writeUTF(playerUuid.toString());
+
+        messenger.sendToAll(out.toByteArray());
+
+        logger.info("[NEXUS] PLAYER_QUIT enviado para " + player.getUsername());
 
         ScheduledTask task = server.getScheduler()
                 .buildTask(this, () -> {
@@ -125,6 +173,32 @@ public class PraxProxyPlugin {
 
         pendingDisconnections.put(playerUuid, task);
     }
+    public void sendPlayerList() {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("PLAYER_LIST");
+
+        var allServers = server.getAllServers();
+        out.writeInt(allServers.size());
+
+        // Iterar todos los servidores registrados en Velocity
+        for (var srv : server.getAllServers()) {
+            String serverName = srv.getServerInfo().getName();
+            var players = srv.getPlayersConnected();
+
+            out.writeUTF(serverName);
+            out.writeInt(players.size());
+
+            for (Player p : players) {
+                out.writeUTF(p.getUniqueId().toString());
+            }
+            messenger.sendToAll(out.toByteArray());
+            logger.info("[NEXUS] PLAYER_LIST enviada a todos los servidores PaperMC.");
+        }
+
+        messenger.sendToAll(out.toByteArray());
+        logger.info("[NEXUS] PLAYER_LIST enviada a todos los servidores PaperMC.");
+    }
+
 
     // ============================================================
     // MANEJO DE SUBCANALES
