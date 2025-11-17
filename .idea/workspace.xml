@@ -5,62 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c80e02b8-cf33-4764-9c09-0dbb8c06b977" name="Changes" comment="SDK PROXCORE">
-      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/messaging/VelocityMessenger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendClient.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendClientTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataManager.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoginCommand.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PluginMessageListener.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PraxCorePlugin.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PraxProxyPlugin.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RegisterCommand.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TokenManager.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arbol_directorios_SDK.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arbol_directorios_SDK_3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arbol_directorios_SDK_4.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generar_arbol.ps1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate_tree.sh" beforeDir="false" afterPath="$PROJECT_DIR$/generate_tree.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/PluginMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/PluginMessageListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/PraxCorePlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/PraxCorePlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/LoginCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/LoginCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/LogoutCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/LogoutCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/java/com/prax/core/commands/RegisterCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/PluginMessageListenerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/PluginMessageListenerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/PraxCorePluginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/PraxCorePluginTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/LoginCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/LoginCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/LogoutCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/LogoutCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/RegisterCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/src/test/java/com/prax/core/commands/RegisterCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/PraxCore-Paper-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/PraxCore-Paper-1.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/PluginMessageListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/PluginMessageListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/PraxCorePlugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/PraxCorePlugin.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/commands/LoginCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/commands/LoginCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/commands/RegisterCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/classes/com/prax/core/commands/RegisterCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/original-PraxCore-Paper-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/original-PraxCore-Paper-1.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.DataManagerTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.PrimerTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LoginCommandTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LoginCommandTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.RegisterCommandTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.RegisterCommandTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.DataManagerTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.PrimerTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LoginCommandTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LoginCommandTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.RegisterCommandTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.RegisterCommandTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/DataManagerTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/PrimerTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/commands/LoginCommandTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/commands/LoginCommandTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/commands/RegisterCommandTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/test-classes/com/prax/core/commands/RegisterCommandTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/PraxProxyPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/PraxProxyPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/PraxProxyPluginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/PraxProxyPluginTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/PraxProxyPlugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/PraxProxyPlugin.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/original-praxcore-velocity-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/original-praxcore-velocity-1.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/test-classes/com/prax/core/velocity/PraxProxyPluginTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/test-classes/com/prax/core/velocity/PraxProxyPluginTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

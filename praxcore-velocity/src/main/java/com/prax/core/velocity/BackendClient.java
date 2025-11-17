@@ -21,7 +21,7 @@ import java.util.UUID;
 public class BackendClient {
 
     private static final Logger logger = LoggerFactory.getLogger(BackendClient.class);
-    private static final String BASE_URL = "http://praxsuite_backend:3000";
+    private static final String BASE_URL = "http://praxsuite_backend:3000";t
     private static final int CONNECT_TIMEOUT = 10000; // 10 segundos
     private static final int READ_TIMEOUT = 30000;    // 30 segundos
 
