@@ -1,3 +1,5 @@
+com/prax/core/velocity/PluginMessageHandlerTest.class
+com/prax/core/velocity/integration/AuthenticationFlowIntegrationTest.class
 com/prax/core/velocity/PraxProxyPluginTest.class
-com/prax/core/velocity/BackendClientTest.class
+com/prax/core/velocity/NexusAuthServiceTest.class
 com/prax/core/velocity/TokenManagerTest.class

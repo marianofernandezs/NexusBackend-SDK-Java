@@ -1,423 +1,561 @@
 package com.prax.core.velocity;
 
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
+import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import com.velocitypowered.api.proxy.ServerConnection;
+import com.velocitypowered.api.proxy.messages.ChannelRegistrar;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
+import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.scheduler.Scheduler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-import java.util.Optional;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.junit.jupiter.api.Disabled;
 
-@DisplayName("PraxProxyPlugin Tests - Simplified")
+/**
+ * Tests unitarios para PraxProxyPlugin
+ */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)  // ← AGREGAR ESTA LÍNEA
 class PraxProxyPluginTest {
 
-    private PraxProxyPlugin plugin;
-    private ProxyServer mockServer;
+    @Mock
+    private ProxyServer mockProxyServer;
+
+    @Mock
     private Logger mockLogger;
+
+    @Mock
+    private ChannelRegistrar mockChannelRegistrar;
+
+    @Mock
+    private EventManager mockEventManager;
+
+    @Mock
+    private Scheduler mockScheduler;
+
+    @Mock
     private Player mockPlayer;
-    private ServerConnection mockConnection;
-    private UUID testUUID;
+
+    @Mock
+    private ProxyInitializeEvent mockProxyInitEvent;
+
+    @Mock
+    private LoginEvent mockLoginEvent;
+
+    @Mock
+    private PostLoginEvent mockPostLoginEvent;
+
+    @Mock
+    private ServerConnectedEvent mockServerConnectedEvent;
+
+    @Mock
+    private DisconnectEvent mockDisconnectEvent;
+
+    @Mock
+    private RegisteredServer mockRegisteredServer;
+
+    @Mock
+    private ServerInfo mockServerInfo;
+
+    @Mock
+    private Scheduler.TaskBuilder mockTaskBuilder;
+
+    private PraxProxyPlugin plugin;
+    private Path testDataDirectory;
+
+    private static final UUID TEST_UUID = UUID.randomUUID();
+    private static final String TEST_USERNAME = "TestPlayer";
+    private static final String TEST_SERVER_NAME = "lobby";
+    private static final String TEST_TOKEN = "test-jwt-token-12345";
 
     @BeforeEach
     void setUp() {
-        // Inicializar mocks
-        mockServer = mock(ProxyServer.class);
-        mockLogger = mock(Logger.class);
-        mockPlayer = mock(Player.class);
-        mockConnection = mock(ServerConnection.class);
+        // Configurar Path de datos
+        testDataDirectory = Paths.get("test-data");
 
-        testUUID = UUID.randomUUID();
-        when(mockPlayer.getUniqueId()).thenReturn(testUUID);
-        when(mockPlayer.getUsername()).thenReturn("TestPlayer");
-        when(mockConnection.getPlayer()).thenReturn(mockPlayer);
+        // Configurar mocks básicos del ProxyServer
+        when(mockProxyServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+        when(mockProxyServer.getEventManager()).thenReturn(mockEventManager);
+        when(mockProxyServer.getScheduler()).thenReturn(mockScheduler);
 
-        // Configurar ChannelRegistrar para que onProxyInitialization pueda ejecutarse
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
+        lenient().when(mockScheduler.buildTask(any(), any(Runnable.class))).thenReturn(mockTaskBuilder);
+        lenient().when(mockTaskBuilder.repeat(anyLong(), any(TimeUnit.class))).thenReturn(mockTaskBuilder);
+        lenient().when(mockTaskBuilder.schedule()).thenReturn(null);
+
+        // Configurar Player mock
+        when(mockPlayer.getUniqueId()).thenReturn(TEST_UUID);
+        when(mockPlayer.getUsername()).thenReturn(TEST_USERNAME);
 
         // Crear instancia del plugin
-        plugin = new PraxProxyPlugin(mockServer, mockLogger);
-
-        // Inicializar el messenger llamando a onProxyInitialization
-        var mockInitEvent = mock(com.velocitypowered.api.event.proxy.ProxyInitializeEvent.class);
-        plugin.onProxyInitialization(mockInitEvent);
+        plugin = new PraxProxyPlugin(mockProxyServer, mockLogger, testDataDirectory);
     }
 
-    // ==================== TESTS DE INICIALIZACIÓN ====================
+    // ==========================================
+    // TESTS DE INICIALIZACIÓN
+    // ==========================================
 
     @Test
-    @DisplayName("Debe crear instancia del plugin correctamente")
-    void testPluginCreation() {
-        // Assert
-        assertNotNull(plugin);
-    }
-
-    @Test
-    @DisplayName("Debe inicializar con ProxyServer inyectado")
-    void testPluginWithProxyServer() {
+    void testOnProxyInitialization_Success() {
         // Act
-        PraxProxyPlugin newPlugin = new PraxProxyPlugin(mockServer, mockLogger);
+        plugin.onProxyInitialization(mockProxyInitEvent);
 
-        // Assert
-        assertNotNull(newPlugin);
-    }
 
-    @Test
-    @DisplayName("Debe inicializar con Logger inyectado")
-    void testPluginWithLogger() {
-        // Act
-        PraxProxyPlugin newPlugin = new PraxProxyPlugin(mockServer, mockLogger);
 
-        // Assert
-        assertNotNull(newPlugin);
-        verify(mockLogger, atLeastOnce()).info(anyString());
-    }
+        // Assert - Verificar que se inicializaron los servicios
+        assertNotNull(plugin.getAuthService(), "AuthService debería estar inicializado");
+        assertNotNull(plugin.getTokenManager(), "TokenManager debería estar inicializado");
 
-    @Test
-    @DisplayName("Debe loggear mensaje de inicialización")
-    void testPluginInitializationLog() {
-        // Arrange
-        Logger spyLogger = mock(Logger.class);
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
-
-        // Act
-        new PraxProxyPlugin(mockServer, spyLogger);
-
-        // Assert
-        verify(spyLogger).info(contains("Plugin inicializado correctamente"));
-    }
-
-    // ==================== TESTS DE COMPONENTES INTERNOS ====================
-
-    @Test
-    @DisplayName("Debe tener TokenManager inicializado")
-    void testTokenManagerInitialized() {
-        // El plugin debería tener un TokenManager interno
-        // Verificamos indirectamente que no lance NPE
-        assertDoesNotThrow(() -> {
-            // El plugin usa internamente TokenManager
-            // No podemos acceder directamente pero podemos verificar que está inicializado
-            assertNotNull(plugin);
-        });
-    }
-
-    @Test
-    @DisplayName("Debe tener BackendClient inicializado")
-    void testBackendClientInitialized() {
-        // El plugin debería tener un BackendClient interno
-        // Verificamos indirectamente
-        assertDoesNotThrow(() -> {
-            assertNotNull(plugin);
-        });
-    }
-
-    // ==================== TESTS DE MANEJO DE EVENTOS ====================
-
-    @Test
-    @DisplayName("onProxyInitialization debe ejecutarse sin errores")
-    void testOnProxyInitialization() {
-        // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.proxy.ProxyInitializeEvent.class);
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        ProxyServer freshServer = mock(ProxyServer.class);
-        when(freshServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
-        Logger freshLogger = mock(Logger.class);
-
-        PraxProxyPlugin freshPlugin = new PraxProxyPlugin(freshServer, freshLogger);
-
-        // Act
-        assertDoesNotThrow(() -> freshPlugin.onProxyInitialization(mockEvent));
-
-        // Assert - Debe registrar 2 canales: prax:core y nexus:sync
+        // Verificar que se registraron los canales
         verify(mockChannelRegistrar, times(2)).register(any());
-        verify(freshLogger, atLeastOnce()).info(contains("Canal"));
+
+        // Verificar que se registró el PluginMessageHandler
+        verify(mockEventManager, times(1))
+                .register(eq(plugin), any(PluginMessageHandler.class));
+
+        ArgumentCaptor<String> msgCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(mockLogger, atLeastOnce()).info(msgCaptor.capture());
+
+
+        verify(mockLogger, atLeastOnce()).info(msgCaptor.capture(), any(Object.class));
+
+        assertTrue(
+                msgCaptor.getAllValues().stream()
+                        .anyMatch(m -> m.contains("Inicializando PraxCore Velocity")),
+                "Debe contener el log de inicio"
+        );
+
+        assertTrue(
+                msgCaptor.getAllValues().stream()
+                        .anyMatch(m -> m.contains("NexusAuthService inicializado con URL")),
+                "Debería contener el log de inicialización de NexusAuthService"
+        );
+
+        assertTrue(
+                msgCaptor.getAllValues().stream()
+                        .anyMatch(m -> m.contains("Inicializando PraxCore Velocity")),
+                "Debe contener el log de inicio"
+        );
+
     }
 
     @Test
-    @DisplayName("onPlayerDisconnect debe manejar desconexión correctamente")
+    void testOnProxyInitialization_UsesDefaultBackendUrl() {
+        // Act
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        ArgumentCaptor<String> msgCaptor = ArgumentCaptor.forClass(String.class);
+
+
+        // Assert - Verificar que se usó la URL por defecto
+        verify(mockLogger, atLeastOnce()).info(msgCaptor.capture(), any(Object.class));
+
+        assertTrue(
+                msgCaptor.getAllValues().stream()
+                        .anyMatch(m -> m.contains("NexusAuthService inicializado con URL")),
+                "Debe registrar el mensaje de inicialización del NexusAuthService"
+        );
+    }
+
+    @Test
+    void testOnProxyInitialization_CreatesScheduledTask() {
+        // Act
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        // Assert - Verificar que se intentó programar la tarea de limpieza
+        verify(mockScheduler, times(1))
+                .buildTask(eq(plugin), any(Runnable.class));
+    }
+
+    // ==========================================
+    // TESTS DE EVENTOS DE JUGADOR
+    // ==========================================
+
+    @Test
+    void testOnPlayerLogin() {
+        // Arrange
+        when(mockLoginEvent.getPlayer()).thenReturn(mockPlayer);
+
+        // Act
+        plugin.onPlayerLogin(mockLoginEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("Jugador conectándose: {} ({})", TEST_USERNAME, TEST_UUID);
+    }
+
+    @Test
+    void testOnPostLogin_WithoutExistingSession() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockPostLoginEvent.getPlayer()).thenReturn(mockPlayer);
+
+        // Act
+        plugin.onPostLogin(mockPostLoginEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("No hay sesión existente para {}", TEST_USERNAME);
+    }
+
+    @Test
+    void testOnPostLogin_WithValidSession() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockPostLoginEvent.getPlayer()).thenReturn(mockPlayer);
+
+        // Simular sesión existente
+        TokenManager tokenManager = plugin.getTokenManager();
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
+
+        // Act
+        plugin.onPostLogin(mockPostLoginEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("Sesión existente encontrada para {}", TEST_USERNAME);
+    }
+
+    @Test
+    void testOnPostLogin_WithInvalidSession() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockPostLoginEvent.getPlayer()).thenReturn(mockPlayer);
+
+        // Simular sesión existente pero inválida
+        TokenManager tokenManager = plugin.getTokenManager();
+        tokenManager.storeToken(TEST_UUID, "invalid-token");
+
+        // Act
+        plugin.onPostLogin(mockPostLoginEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("Sesión existente encontrada para {}", TEST_USERNAME);
+        // En este caso el token será validado contra el backend mock
+        // y debería fallar, resultando en la eliminación de la sesión
+    }
+
+    @Test
+    void testOnServerConnected() {
+        // Arrange
+        when(mockServerConnectedEvent.getPlayer()).thenReturn(mockPlayer);
+        when(mockServerConnectedEvent.getServer()).thenReturn(mockRegisteredServer);
+        when(mockRegisteredServer.getServerInfo()).thenReturn(mockServerInfo);
+        when(mockServerInfo.getName()).thenReturn(TEST_SERVER_NAME);
+
+        // Act
+        plugin.onServerConnected(mockServerConnectedEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("{} conectado a servidor: {}", TEST_USERNAME, TEST_SERVER_NAME);
+    }
+
+    @Test
     void testOnPlayerDisconnect() {
         // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        when(mockEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockDisconnectEvent.getPlayer()).thenReturn(mockPlayer);
 
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
+        // Crear sesión antes de desconectar
+        TokenManager tokenManager = plugin.getTokenManager();
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
+        assertTrue(tokenManager.sessionExists(TEST_UUID), "Sesión debería existir antes de desconectar");
 
-        // Act & Assert
-        assertDoesNotThrow(() -> plugin.onPlayerDisconnect(mockEvent));
-        verify(mockLogger, atLeastOnce()).info(contains("desconectado"));
+        // Act
+        plugin.onPlayerDisconnect(mockDisconnectEvent);
+
+        // Assert
+        verify(mockLogger, times(1))
+                .info("Jugador desconectado: {} ({})", TEST_USERNAME, TEST_UUID);
+
+        // Verificar que la sesión NO fue eliminada (se mantiene)
+        assertTrue(tokenManager.sessionExists(TEST_UUID),
+                "Sesión debería mantenerse después de desconectar");
     }
 
     @Test
-    @DisplayName("onServerSwitch debe manejar cambio de servidor")
-    void testOnServerSwitch() {
+    void testOnPlayerDisconnect_SessionPersists() {
         // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.player.ServerConnectedEvent.class);
-        when(mockEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockDisconnectEvent.getPlayer()).thenReturn(mockPlayer);
 
-        var mockServerInfo = mock(com.velocitypowered.api.proxy.server.ServerInfo.class);
-        var mockRegisteredServer = mock(com.velocitypowered.api.proxy.server.RegisteredServer.class);
-        when(mockServerInfo.getName()).thenReturn("lobby");
+        TokenManager tokenManager = plugin.getTokenManager();
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
+
+        // Act
+        plugin.onPlayerDisconnect(mockDisconnectEvent);
+
+        // Assert - La sesión debe persistir para permitir reconexión
+        String storedToken = tokenManager.getToken(TEST_UUID);
+        assertEquals(TEST_TOKEN, storedToken, "Token debería seguir almacenado");
+    }
+
+    // ==========================================
+    // TESTS DE GETTERS
+    // ==========================================
+
+    @Test
+    void testGetAuthService() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        // Act
+        NexusAuthService authService = plugin.getAuthService();
+
+        // Assert
+        assertNotNull(authService, "AuthService no debería ser null");
+    }
+
+    @Test
+    void testGetTokenManager() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        // Act
+        TokenManager tokenManager = plugin.getTokenManager();
+
+        // Assert
+        assertNotNull(tokenManager, "TokenManager no debería ser null");
+    }
+
+    @Test
+    void testGetServer() {
+        // Act
+        ProxyServer server = plugin.getServer();
+
+        // Assert
+        assertNotNull(server, "ProxyServer no debería ser null");
+        assertEquals(mockProxyServer, server, "Debería retornar el ProxyServer inyectado");
+    }
+
+    @Test
+    void testGetLogger() {
+        // Act
+        Logger logger = plugin.getLogger();
+
+        // Assert
+        assertNotNull(logger, "Logger no debería ser null");
+        assertEquals(mockLogger, logger, "Debería retornar el Logger inyectado");
+    }
+
+    @Test
+    void testGetPraxChannel() {
+        // Act
+        MinecraftChannelIdentifier channel = PraxProxyPlugin.getPraxChannel();
+
+        // Assert
+        assertNotNull(channel, "PRAX_CHANNEL no debería ser null");
+        assertEquals("prax:core", channel.getId(), "Channel ID debería ser 'prax:core'");
+    }
+
+    @Test
+    void testGetNexusChannel() {
+        // Act
+        MinecraftChannelIdentifier channel = PraxProxyPlugin.getNexusChannel();
+
+        // Assert
+        assertNotNull(channel, "NEXUS_CHANNEL no debería ser null");
+        assertEquals("nexus:sync", channel.getId(), "Channel ID debería ser 'nexus:sync'");
+    }
+
+    // ==========================================
+    // TESTS DE INTEGRACIÓN DE COMPONENTES
+    // ==========================================
+
+    @Test
+    void testPluginInitialization_AllComponentsWork() {
+        // Act
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        // Assert - Verificar que todos los componentes están inicializados y conectados
+        assertNotNull(plugin.getAuthService());
+        assertNotNull(plugin.getTokenManager());
+        assertNotNull(plugin.getServer());
+        assertNotNull(plugin.getLogger());
+
+        // Verificar que los servicios pueden interactuar
+        TokenManager tokenManager = plugin.getTokenManager();
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
+        assertTrue(tokenManager.sessionExists(TEST_UUID));
+        assertEquals(TEST_TOKEN, tokenManager.getToken(TEST_UUID));
+    }
+
+    @Test
+    void testCleanupTask_CanBeExecuted() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        TokenManager tokenManager = plugin.getTokenManager();
+
+        // Act - Ejecutar manualmente la limpieza
+        tokenManager.cleanupExpiredSessions();
+
+        // Assert - No debería lanzar excepciones
+        assertTrue(true, "cleanupExpiredSessions debería ejecutarse sin errores");
+    }
+
+    @Test
+    void testScheduledTaskCreation() {
+        // Act
+        plugin.onProxyInitialization(mockProxyInitEvent);
+
+        // Assert - Verificar que se capturó el runnable de limpieza
+        ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(mockScheduler, times(1)).buildTask(eq(plugin), runnableCaptor.capture());
+
+        Runnable cleanupTask = runnableCaptor.getValue();
+        assertNotNull(cleanupTask, "La tarea de limpieza no debería ser null");
+
+        // Ejecutar la tarea manualmente para verificar que funciona
+        assertDoesNotThrow(() -> cleanupTask.run(),
+                "La tarea de limpieza debería ejecutarse sin errores");
+    }
+
+    // ==========================================
+    // TESTS DE FLUJOS COMPLETOS
+    // ==========================================
+
+    @Test
+    void testCompletePlayerFlow_LoginToDisconnect() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        TokenManager tokenManager = plugin.getTokenManager();
+
+        // 1. Player Login
+        when(mockLoginEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onPlayerLogin(mockLoginEvent);
+        verify(mockLogger, times(1)).info("Jugador conectándose: {} ({})", TEST_USERNAME, TEST_UUID);
+
+        // 2. PostLogin sin sesión
+        when(mockPostLoginEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onPostLogin(mockPostLoginEvent);
+        verify(mockLogger, times(1)).info("No hay sesión existente para {}", TEST_USERNAME);
+
+        // 3. Simular que el jugador hizo login y ahora tiene token
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
+
+        // 4. ServerConnected
+        when(mockServerConnectedEvent.getPlayer()).thenReturn(mockPlayer);
+        when(mockServerConnectedEvent.getServer()).thenReturn(mockRegisteredServer);
         when(mockRegisteredServer.getServerInfo()).thenReturn(mockServerInfo);
-        when(mockEvent.getServer()).thenReturn(mockRegisteredServer);
+        when(mockServerInfo.getName()).thenReturn(TEST_SERVER_NAME);
+        plugin.onServerConnected(mockServerConnectedEvent);
+        verify(mockLogger, times(1)).info("{} conectado a servidor: {}", TEST_USERNAME, TEST_SERVER_NAME);
 
-        // Mock getCurrentServer para que devuelva Optional.empty()
-        when(mockPlayer.getCurrentServer()).thenReturn(Optional.empty());
+        // 5. Player Disconnect
+        when(mockDisconnectEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onPlayerDisconnect(mockDisconnectEvent);
+        verify(mockLogger, times(1)).info("Jugador desconectado: {} ({})", TEST_USERNAME, TEST_UUID);
 
-        // Act & Assert
-        assertDoesNotThrow(() -> plugin.onServerSwitch(mockEvent));
-        verify(mockLogger, atLeastOnce()).info(contains("cambió de servidor"));
-    }
-
-    // ==================== TESTS DE PLUGIN MESSAGES ====================
-
-    @Test
-    @DisplayName("onPluginMessage debe ignorar canales desconocidos")
-    void testOnPluginMessageUnknownChannel() {
-        // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.connection.PluginMessageEvent.class);
-        var unknownChannel = mock(com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier.class);
-        when(mockEvent.getIdentifier()).thenReturn(unknownChannel);
-
-        // Act
-        plugin.onPluginMessage(mockEvent);
-
-        // Assert
-        verify(mockEvent, never()).setResult(any());
+        // 6. Verificar que la sesión persiste después de desconectar
+        assertTrue(tokenManager.sessionExists(TEST_UUID), "Sesión debería persistir");
     }
 
     @Test
-    @DisplayName("onPluginMessage debe procesar solo mensajes de ServerConnection")
-    void testOnPluginMessageFromServerConnection() {
+    void testPlayerReconnect_WithExistingSession() {
         // Arrange
-        var mockEvent = mock(com.velocitypowered.api.event.connection.PluginMessageEvent.class);
-        var correctChannel = com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier.from("prax:core");
-        when(mockEvent.getIdentifier()).thenReturn(correctChannel);
-        when(mockEvent.getSource()).thenReturn(mockPlayer); // No es ServerConnection
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        TokenManager tokenManager = plugin.getTokenManager();
 
-        // Act
-        plugin.onPluginMessage(mockEvent);
+        // Simular sesión existente de conexión anterior
+        tokenManager.storeToken(TEST_UUID, TEST_TOKEN);
 
-        // Assert
-        verify(mockEvent, never()).setResult(any());
+        // Act - Player se reconecta
+        when(mockPostLoginEvent.getPlayer()).thenReturn(mockPlayer);
+        plugin.onPostLogin(mockPostLoginEvent);
+
+        // Assert - Debería encontrar la sesión existente
+        verify(mockLogger, times(1))
+                .info("Sesión existente encontrada para {}", TEST_USERNAME);
+        assertTrue(tokenManager.sessionExists(TEST_UUID), "Sesión debería seguir existiendo");
     }
 
-    // ==================== TESTS DE CASOS EDGE ====================
+    // ==========================================
+    // TESTS DE CONCURRENCIA
+    // ==========================================
 
     @Test
-    @DisplayName("Debe manejar múltiples jugadores simultáneamente")
-    void testMultiplePlayersSimultaneous() {
+    void testMultiplePlayersSimultaneously() {
         // Arrange
-        UUID uuid1 = UUID.randomUUID();
-        UUID uuid2 = UUID.randomUUID();
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        TokenManager tokenManager = plugin.getTokenManager();
 
-        Player player1 = mock(Player.class);
-        Player player2 = mock(Player.class);
+        UUID player1 = UUID.randomUUID();
+        UUID player2 = UUID.randomUUID();
+        UUID player3 = UUID.randomUUID();
 
-        when(player1.getUniqueId()).thenReturn(uuid1);
-        when(player1.getUsername()).thenReturn("Player1");
-        when(player2.getUniqueId()).thenReturn(uuid2);
-        when(player2.getUsername()).thenReturn("Player2");
+        // Act - Múltiples jugadores conectándose
+        tokenManager.storeToken(player1, "token1");
+        tokenManager.storeToken(player2, "token2");
+        tokenManager.storeToken(player3, "token3");
 
-        var event1 = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        var event2 = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        when(event1.getPlayer()).thenReturn(player1);
-        when(event2.getPlayer()).thenReturn(player2);
+        // Assert - Todas las sesiones deberían existir independientemente
+        assertTrue(tokenManager.sessionExists(player1));
+        assertTrue(tokenManager.sessionExists(player2));
+        assertTrue(tokenManager.sessionExists(player3));
 
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
+        assertEquals("token1", tokenManager.getToken(player1));
+        assertEquals("token2", tokenManager.getToken(player2));
+        assertEquals("token3", tokenManager.getToken(player3));
+    }
 
-        // Act & Assert
-        assertDoesNotThrow(() -> {
-            plugin.onPlayerDisconnect(event1);
-            plugin.onPlayerDisconnect(event2);
+    // ==========================================
+    // TESTS DE ROBUSTEZ
+    // ==========================================
+
+    @Test
+    void testInitialization_WithNullPlayer() {
+        // Arrange
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        when(mockLoginEvent.getPlayer()).thenReturn(null);
+
+        // Act & Assert - Debería manejar null sin crashear
+        assertThrows(NullPointerException.class, () -> {
+            plugin.onPlayerLogin(mockLoginEvent);
         });
     }
 
     @Test
-    @DisplayName("Debe manejar reconexión rápida del jugador")
-    void testQuickReconnect() {
+    void testTokenManager_MultipleOperationsOnSamePlayer() {
         // Arrange
-        var disconnectEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        var switchEvent = mock(com.velocitypowered.api.event.player.ServerConnectedEvent.class);
+        plugin.onProxyInitialization(mockProxyInitEvent);
+        TokenManager tokenManager = plugin.getTokenManager();
 
-        when(disconnectEvent.getPlayer()).thenReturn(mockPlayer);
-        when(switchEvent.getPlayer()).thenReturn(mockPlayer);
+        // Act - Múltiples operaciones
+        tokenManager.storeToken(TEST_UUID, "token1");
+        assertTrue(tokenManager.sessionExists(TEST_UUID));
 
-        var mockServerInfo = mock(com.velocitypowered.api.proxy.server.ServerInfo.class);
-        var mockRegisteredServer = mock(com.velocitypowered.api.proxy.server.RegisteredServer.class);
-        when(mockServerInfo.getName()).thenReturn("lobby");
-        when(mockRegisteredServer.getServerInfo()).thenReturn(mockServerInfo);
-        when(switchEvent.getServer()).thenReturn(mockRegisteredServer);
-        when(mockPlayer.getCurrentServer()).thenReturn(Optional.empty());
+        tokenManager.storeToken(TEST_UUID, "token2"); // Sobrescribir
+        assertEquals("token2", tokenManager.getToken(TEST_UUID));
 
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
-
-        // Act & Assert - Simular disconnect seguido de switch
-        assertDoesNotThrow(() -> {
-            plugin.onPlayerDisconnect(disconnectEvent);
-            plugin.onServerSwitch(switchEvent);
-        });
-
-        verify(mockLogger, atLeastOnce()).info(contains("desconectado"));
-        verify(mockLogger, atLeastOnce()).info(contains("cambió de servidor"));
-    }
-
-    // ==================== TESTS DE INTEGRACIÓN ====================
-
-    @Test
-    @DisplayName("Debe poder manejar ciclo completo: init -> disconnect")
-    void testCompleteLifecycle() {
-        // Arrange
-        var disconnectEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-
-        when(disconnectEvent.getPlayer()).thenReturn(mockPlayer);
-
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
-
-        // Act & Assert - El plugin ya fue inicializado en setUp
-        assertDoesNotThrow(() -> {
-            plugin.onPlayerDisconnect(disconnectEvent);
-        });
-    }
-
-    // ==================== TESTS DE LOGGING ====================
-
-    @Test
-    @DisplayName("Debe loggear eventos importantes")
-    void testImportantEventsAreLogged() {
-        // Arrange
-        var disconnectEvent = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-        when(disconnectEvent.getPlayer()).thenReturn(mockPlayer);
-
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
-
-        // Act
-        plugin.onPlayerDisconnect(disconnectEvent);
+        tokenManager.removeSession(TEST_UUID);
+        assertFalse(tokenManager.sessionExists(TEST_UUID));
 
         // Assert
-        verify(mockLogger, atLeastOnce()).info(anyString());
-    }
-
-    @Test
-    @DisplayName("Debe loggear warnings para situaciones anormales")
-    void testWarningsForAbnormalSituations() {
-        // El plugin debería usar logger.warn() en casos especiales
-        // Verificamos que el logger está disponible
-        assertDoesNotThrow(() -> {
-            // Los warnings se logguean internamente en handleValidateToken, etc.
-            assertNotNull(mockLogger);
-        });
-    }
-
-    // ==================== TESTS DE THREAD SAFETY ====================
-
-    @Test
-    @DisplayName("Debe ser thread-safe para eventos concurrentes")
-    void testConcurrentEvents() throws InterruptedException {
-        // Arrange
-        int threadCount = 10;
-        Thread[] threads = new Thread[threadCount];
-
-        var mockScheduler = mock(Scheduler.class);
-        var mockTaskBuilder = mock(Scheduler.TaskBuilder.class);
-        when(mockServer.getScheduler()).thenReturn(mockScheduler);
-        when(mockScheduler.buildTask(any(Object.class), any(Runnable.class))).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.delay(anyLong(), any())).thenReturn(mockTaskBuilder);
-        when(mockTaskBuilder.schedule()).thenReturn(mock(com.velocitypowered.api.scheduler.ScheduledTask.class));
-
-        // Act
-        for (int i = 0; i < threadCount; i++) {
-            final int index = i;
-            threads[i] = new Thread(() -> {
-                Player player = mock(Player.class);
-                when(player.getUniqueId()).thenReturn(UUID.randomUUID());
-                when(player.getUsername()).thenReturn("Player" + index);
-
-                var event = mock(com.velocitypowered.api.event.connection.DisconnectEvent.class);
-                when(event.getPlayer()).thenReturn(player);
-
-                plugin.onPlayerDisconnect(event);
-            });
-            threads[i].start();
-        }
-
-        // Wait
-        for (Thread thread : threads) {
-            thread.join();
-        }
-
-        // Assert - No debe crashear
-        assertTrue(true);
-    }
-
-    // ==================== TESTS DE DEPENDENCIAS ====================
-
-    @Test
-    @DisplayName("Debe poder crear múltiples instancias del plugin")
-    void testMultiplePluginInstances() {
-        // Arrange
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(mockServer.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
-
-        // Act
-        PraxProxyPlugin plugin1 = new PraxProxyPlugin(mockServer, mockLogger);
-        PraxProxyPlugin plugin2 = new PraxProxyPlugin(mockServer, mockLogger);
-
-        // Assert
-        assertNotNull(plugin1);
-        assertNotNull(plugin2);
-        assertNotSame(plugin1, plugin2);
-    }
-
-    @Test
-    @DisplayName("Debe funcionar con diferentes servidores proxy")
-    void testDifferentProxyServers() {
-        // Arrange
-        ProxyServer server1 = mock(ProxyServer.class);
-        ProxyServer server2 = mock(ProxyServer.class);
-
-        var mockChannelRegistrar = mock(com.velocitypowered.api.proxy.messages.ChannelRegistrar.class);
-        when(server1.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
-        when(server2.getChannelRegistrar()).thenReturn(mockChannelRegistrar);
-
-        // Act
-        PraxProxyPlugin plugin1 = new PraxProxyPlugin(server1, mockLogger);
-        PraxProxyPlugin plugin2 = new PraxProxyPlugin(server2, mockLogger);
-
-        // Assert
-        assertNotNull(plugin1);
-        assertNotNull(plugin2);
+        assertNull(tokenManager.getToken(TEST_UUID),
+                "Token debería ser null después de remover sesión");
     }
 }

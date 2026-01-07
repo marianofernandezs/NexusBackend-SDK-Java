@@ -6,7 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="praxcore-velocity" />
         <module name="praxcore-paper" />
       </profile>
       <profile name="Annotation profile for PraxCore-Parent" enabled="true">
@@ -51,6 +50,7 @@
           <entry name="$MAVEN_REPOSITORY$/com/github/ben-manes/caffeine/caffeine/3.1.5/caffeine-3.1.5.jar" />
         </processorPath>
         <module name="PraxCore-Velocity" />
+        <module name="praxcore-velocity" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

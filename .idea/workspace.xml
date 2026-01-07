@@ -5,7 +5,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c80e02b8-cf33-4764-9c09-0dbb8c06b977" name="Changes" comment="SDK PROXCORE">
+      <change afterPath="$PROJECT_DIR$/AuthenticactionflowintegrationTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NexusAuthService.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PluginMessageHandler.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PraxProxyPlugin.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PraxProxyPluginTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/NexusAuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/PluginMessageHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/NexusAuthServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/PluginMessageHandlerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/integration/AuthenticationflowintegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/directory_tree.txt" beforeDir="false" afterPath="$PROJECT_DIR$/directory_tree_plugin.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/PraxCore-Paper-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/PraxCore-Paper-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/original-PraxCore-Paper-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/original-PraxCore-Paper-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.PluginMessageListenerAdvancedTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.PluginMessageListenerAdvancedTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.PraxCorePluginAdvancedTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.PraxCorePluginAdvancedTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LoginCommandTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LoginCommandTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LogoutCommandTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.LogoutCommandTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.RegisterCommandTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/TEST-com.prax.core.commands.RegisterCommandTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.PluginMessageListenerAdvancedTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.PluginMessageListenerAdvancedTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.PraxCorePluginAdvancedTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.PraxCorePluginAdvancedTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LoginCommandTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LoginCommandTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LogoutCommandTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.LogoutCommandTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.RegisterCommandTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-paper/target/surefire-reports/com.prax.core.commands.RegisterCommandTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/BackendClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/PraxProxyPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/src/main/java/com/prax/core/velocity/PraxProxyPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/BackendClientTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/PraxProxyPluginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/src/test/java/com/prax/core/velocity/PraxProxyPluginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/PraxCore-Velocity-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/PraxCore-Velocity-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/BackendClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/PraxProxyPlugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/classes/com/prax/core/velocity/PraxProxyPlugin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/classes/velocity-plugin.json" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/classes/velocity-plugin.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/original-praxcore-velocity-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/original-praxcore-velocity-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/test-classes/com/prax/core/velocity/BackendClientTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praxcore-velocity/target/test-classes/com/prax/core/velocity/PraxProxyPluginTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/praxcore-velocity/target/test-classes/com/prax/core/velocity/PraxProxyPluginTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,40 +77,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "PowerShell.generar_arbol.ps1.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "feature/UpdateGeneral",
-    "jdk.selected.JDK": "21",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.39425287",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;PowerShell.generar_arbol.ps1.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ImplementSDK&quot;,
+    &quot;jdk.selected.JDK&quot;: &quot;21&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mariano/Documents/Personal /Proyectos/NexusCraft/Code/NexusBackend-SDK-Java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.39425287&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   },
-  "keyToStringList": {
-    "jdk.preference.JDK": [
-      "21=C:/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot"
+  &quot;keyToStringList&quot;: {
+    &quot;jdk.preference.JDK&quot;: [
+      &quot;21=C:/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-velocity\src\main\java\com\prax\core\velocity" />
       <recent name="J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-velocity" />
       <recent name="J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper" />
       <recent name="J:\PRACTICA - 1 TESSERACT\MiPlugin\src\main" />
-      <recent name="J:\PRACTICA - 1 TESSERACT\MiPlugin" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="J:\PRACTICA - 1 TESSERACT\NexusBackend_SDK_clone\praxcore-paper" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.prax.core.velocity" />
     </key>
   </component>
   <component name="RunManager">

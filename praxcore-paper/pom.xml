@@ -44,6 +44,14 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.tesseractsoftwares.nexusbackend</groupId>
+            <artifactId>sdkjava</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+
     </dependencies>
 
 
